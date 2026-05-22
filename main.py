@@ -1,10 +1,14 @@
 import telebot
 from openai import OpenAI
+from dotenv import load_dotenv
 import time
 import threading
 import random
-import sys
 import traceback
+import os
+import logging
+
+load_dotenv()
 
 # ============================================
 # CONFIGURAÇÕES
