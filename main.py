@@ -17,10 +17,10 @@ logging.basicConfig(level=logging.INFO)
 # VARIÁVEIS DE AMBIENTE
 # ============================================
 
-OPENAI_KEY = os.getenv("OPENAI_KEY")
-TELEGRAM_BOT_KEY = os.getenv("TELEGRAM_BOT_KEY")
-LOG_CHAT_ID = os.getenv("LOG_CHAT_ID")
-VIP_LINK = os.getenv("VIP_LINK")
+OPENAI_KEY = os.getenv("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")
+TELEGRAM_BOT_KEY = os.getenv("8767090132:AAFmdHJSLmPvReEQEGW1XuKqE4Xfw56B6OM")
+LOG_CHAT_ID = os.getenv("-1003525401040")
+VIP_LINK = os.getenv("https://t.me/bialinsbot")
 
 if not OPENAI_KEY:
     raise Exception("OPENAI_KEY não encontrada")
