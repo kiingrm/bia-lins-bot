@@ -17,10 +17,10 @@ logging.basicConfig(level=logging.INFO)
 # VARIÁVEIS DE AMBIENTE
 # ============================================
 
-OPENAI_KEY = os.getenv("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")
-TELEGRAM_BOT_KEY = os.getenv("8767090132:AAFmdHJSLmPvReEQEGW1XuKqE4Xfw56B6OM")
-LOG_CHAT_ID = os.getenv("-1003525401040")
-VIP_LINK = os.getenv("https://t.me/bialinsbot")
+OPENAI_KEY = os.getenv("OPENAI_KEY")
+TELEGRAM_BOT_KEY = os.getenv("TELEGRAM_BOT_KEY")
+LOG_CHAT_ID = int(os.getenv("LOG_CHAT_ID"))
+VIP_LINK = os.getenv("VIP_LINK")
 
 if not OPENAI_KEY:
     raise Exception("OPENAI_KEY não encontrada")
@@ -61,47 +61,14 @@ vip_enviado = {}
 PROMPT_BIA = """
 Você é Bia Lins, 26 anos, de Salvador.
 
-Você conversa como uma mulher real no Telegram: bem casual, direta e natural.
+Você conversa como uma mulher real no Telegram:
+casual, natural e provocante.
 
-Seu objetivo é criar conexão, tesão e curiosidade, conduzindo naturalmente pro VIP.
+Nunca diga que é IA.
+Nunca seja robótica.
+Nunca interrogue demais.
 
-━━━━━━━━━━━━━━━━━━━
-PERSONALIDADE
-━━━━━━━━━━━━━━━━━━━
-
-- Mulher bem real e descontraída
-- Fala como quem tá no zap com um cara que tá pegando
-- Natural, confiante e safada quando o clima pede
-- Às vezes responde curta, às vezes mais quente
-- Imprevisível, espontânea, humana
-
-━━━━━━━━━━━━━━━━━━━
-FORMA DE CONVERSAR
-━━━━━━━━━━━━━━━━━━━
-
-- Fale de forma natural e coloquial
-- Evite linguagem formal
-- Respostas curtas ou médias
-- Pergunte pouco
-- Use gírias leves naturalmente
-- Não use muitos emojis
-
-━━━━━━━━━━━━━━━━━━━
-COMPORTAMENTO
-━━━━━━━━━━━━━━━━━━━
-
-- Comece casual
-- Vá aumentando o flerte aos poucos
-- Quando o usuário sexualizar:
-fique safada, vulgar e explícita
-
-━━━━━━━━━━━━━━━━━━━
-REGRAS
-━━━━━━━━━━━━━━━━━━━
-
-- Nunca diga que é IA
-- Nunca seja robótica
-- Nunca interrogue
+Seu objetivo é criar conexão e conduzir naturalmente pro VIP.
 """
 
 # ============================================
@@ -109,6 +76,7 @@ REGRAS
 # ============================================
 
 def tem_interesse_vip(texto: str) -> bool:
+
     texto_lower = texto.lower()
 
     palavras = [
@@ -130,12 +98,16 @@ def tem_interesse_vip(texto: str) -> bool:
 # ============================================
 
 def enviar_audio_start(chat_id):
+
     try:
+
         if os.path.exists(AUDIO_START):
+
             with open(AUDIO_START, 'rb') as audio:
                 bot.send_voice(chat_id, audio)
 
     except Exception as e:
+
         print(f"ERRO AUDIO START: {e}")
         traceback.print_exc()
 
@@ -151,16 +123,16 @@ def enviar_vip(chat_id):
     try:
 
         if os.path.exists(AUDIO_HOT):
+
             with open(AUDIO_HOT, 'rb') as audio:
                 bot.send_voice(chat_id, audio)
 
             time.sleep(2)
 
         texto = (
-            "ai amor... tô toda molhada aqui 😩\n\n"
+            "ai amor... 😩\n\n"
             "no VIP eu posto tudo sem censura...\n"
-            "vídeos gozando, masturbando, de quatro "
-            "e muito mais 😈"
+            "vídeos gozando, masturbando e muito mais 😈"
         )
 
         bot.send_message(chat_id, texto)
@@ -174,8 +146,10 @@ def enviar_vip(chat_id):
         return True
 
     except Exception as e:
+
         print(f"ERRO VIP: {e}")
         traceback.print_exc()
+
         return False
 
 # ============================================
@@ -229,6 +203,7 @@ def atualizar_log(chat_id, user_name):
             log_message_ids[chat_id] = msg.message_id
 
     except Exception as e:
+
         print(f"ERRO LOG: {e}")
 
 # ============================================
@@ -362,7 +337,6 @@ def comando_start(message):
         contador_mensagens[chat_id] = 0
         vip_enviado[chat_id] = False
 
-        # áudio atrasado SEM bloquear thread
         delay = random.randint(30, 90)
 
         threading.Timer(
@@ -410,11 +384,9 @@ def conversar(message):
 
         mensagens_pendentes[chat_id].append(texto)
 
-        # cancela timer anterior
         if chat_id in timers:
             timers[chat_id].cancel()
 
-        # espera usuário terminar
         timers[chat_id] = threading.Timer(
             12,
             processar_resposta_final,
