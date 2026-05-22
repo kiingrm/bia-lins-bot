@@ -257,7 +257,7 @@ def comando_start(message):
     try:
         chat_id = message.chat.id
 
-        delay_inicial = random.randint(55, 160)
+        delay_inicial = random.randint(55, 60)
         time.sleep(delay_inicial)
 
         with open(AUDIO_START, 'rb') as audio:
