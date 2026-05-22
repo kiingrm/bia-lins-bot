@@ -19,14 +19,26 @@ logging.basicConfig(level=logging.INFO)
 
 OPENAI_KEY = os.getenv("OPENAI_KEY")
 TELEGRAM_BOT_KEY = os.getenv("TELEGRAM_BOT_KEY")
-LOG_CHAT_ID = int(os.getenv("LOG_CHAT_ID"))
+LOG_CHAT_ID = os.getenv("LOG_CHAT_ID")
 VIP_LINK = os.getenv("VIP_LINK")
+
+# ============================================
+# VALIDAÇÕES
+# ============================================
 
 if not OPENAI_KEY:
     raise Exception("OPENAI_KEY não encontrada")
 
 if not TELEGRAM_BOT_KEY:
     raise Exception("TELEGRAM_BOT_KEY não encontrada")
+
+if not LOG_CHAT_ID:
+    raise Exception("LOG_CHAT_ID não encontrado")
+
+if not VIP_LINK:
+    raise Exception("VIP_LINK não encontrado")
+
+LOG_CHAT_ID = int(LOG_CHAT_ID)
 
 # ============================================
 # DEBUG
@@ -48,37 +60,17 @@ AUDIO_HOT = "hot.ogg"
 # TELEGRAM
 # ============================================
 
-try:
+bot = telebot.TeleBot(TELEGRAM_BOT_KEY)
 
-    bot = telebot.TeleBot(TELEGRAM_BOT_KEY)
-
-    print("BOT TELEGRAM INICIADO")
-
-except Exception as e:
-
-    print("ERRO TELEGRAM:", e)
-
-    traceback.print_exc()
-
-    raise e
+print("BOT TELEGRAM INICIADO")
 
 # ============================================
 # OPENAI
 # ============================================
 
-try:
+openai_client = OpenAI(api_key=OPENAI_KEY)
 
-    openai_client = OpenAI(api_key=OPENAI_KEY)
-
-    print("OPENAI CLIENT INICIADO")
-
-except Exception as e:
-
-    print("ERRO OPENAI:", e)
-
-    traceback.print_exc()
-
-    raise e
+print("OPENAI CLIENT INICIADO")
 
 # ============================================
 # MEMÓRIA
@@ -108,9 +100,9 @@ Nunca seja robótica.
 # DETECTAR INTERESSE VIP
 # ============================================
 
-def tem_interesse_vip(texto: str) -> bool:
+def tem_interesse_vip(texto):
 
-    texto_lower = texto.lower()
+    texto = texto.lower()
 
     palavras = [
         "vip",
@@ -124,7 +116,7 @@ def tem_interesse_vip(texto: str) -> bool:
         "quero o vip"
     ]
 
-    return any(p in texto_lower for p in palavras)
+    return any(p in texto for p in palavras)
 
 # ============================================
 # ENVIAR ÁUDIO START
@@ -136,13 +128,12 @@ def enviar_audio_start(chat_id):
 
         if os.path.exists(AUDIO_START):
 
-            with open(AUDIO_START, 'rb') as audio:
+            with open(AUDIO_START, "rb") as audio:
                 bot.send_voice(chat_id, audio)
 
     except Exception as e:
 
-        print(f"ERRO AUDIO START: {e}")
-
+        print("ERRO AUDIO START:", e)
         traceback.print_exc()
 
 # ============================================
@@ -152,21 +143,21 @@ def enviar_audio_start(chat_id):
 def enviar_vip(chat_id):
 
     if vip_enviado.get(chat_id, False):
-        return False
+        return
 
     try:
 
         if os.path.exists(AUDIO_HOT):
 
-            with open(AUDIO_HOT, 'rb') as audio:
+            with open(AUDIO_HOT, "rb") as audio:
                 bot.send_voice(chat_id, audio)
 
             time.sleep(2)
 
         texto = (
-            "ai amor... 😩\n\n"
+            "ai amor 😩\n\n"
             "no VIP eu posto tudo sem censura...\n"
-            "vídeos gozando, masturbando e muito mais 😈"
+            "vídeos exclusivos e muito mais 😈"
         )
 
         bot.send_message(chat_id, texto)
@@ -177,32 +168,27 @@ def enviar_vip(chat_id):
 
         vip_enviado[chat_id] = True
 
-        return True
-
     except Exception as e:
 
-        print(f"ERRO VIP: {e}")
-
+        print("ERRO VIP:", e)
         traceback.print_exc()
 
-        return False
-
 # ============================================
-# ATUALIZAR LOG
+# LOG
 # ============================================
 
 def atualizar_log(chat_id, user_name):
 
     try:
 
-        hist_texto = "\n".join(
+        hist = "\n".join(
             historico_conversas.get(chat_id, [])
         )
 
-        if len(hist_texto) > 3000:
-            hist_texto = hist_texto[-3000:]
+        if len(hist) > 3000:
+            hist = hist[-3000:]
 
-        texto_log = f"👤 {user_name}\n\n{hist_texto}"
+        texto = f"👤 {user_name}\n\n{hist}"
 
         markup = telebot.types.InlineKeyboardMarkup()
 
@@ -218,9 +204,9 @@ def atualizar_log(chat_id, user_name):
             try:
 
                 bot.edit_message_text(
-                    text=texto_log,
-                    chat_id=LOG_CHAT_ID,
-                    message_id=log_message_ids[chat_id],
+                    texto,
+                    LOG_CHAT_ID,
+                    log_message_ids[chat_id],
                     reply_markup=markup
                 )
 
@@ -231,7 +217,7 @@ def atualizar_log(chat_id, user_name):
 
             msg = bot.send_message(
                 LOG_CHAT_ID,
-                texto_log,
+                texto,
                 reply_markup=markup
             )
 
@@ -239,10 +225,10 @@ def atualizar_log(chat_id, user_name):
 
     except Exception as e:
 
-        print(f"ERRO LOG: {e}")
+        print("ERRO LOG:", e)
 
 # ============================================
-# PROCESSAR RESPOSTA
+# IA
 # ============================================
 
 def processar_resposta_final(chat_id):
@@ -280,7 +266,6 @@ def processar_resposta_final(chat_id):
         if tem_interesse_vip(texto_usuario):
 
             enviar_vip(chat_id)
-
             return
 
         bot.send_chat_action(chat_id, "typing")
@@ -290,7 +275,6 @@ def processar_resposta_final(chat_id):
         if contador_mensagens[chat_id] >= 20:
 
             enviar_vip(chat_id)
-
             return
 
         resposta = openai_client.chat.completions.create(
@@ -299,7 +283,7 @@ def processar_resposta_final(chat_id):
                 memoria_contexto[chat_id][0]
             ] + memoria_contexto[chat_id][-10:],
             max_tokens=140,
-            temperature=0.78
+            temperature=0.8
         )
 
         texto_resposta = resposta.choices[0].message.content
@@ -319,15 +303,14 @@ def processar_resposta_final(chat_id):
 
     except Exception as e:
 
-        print(f"ERRO IA ({chat_id}): {e}")
-
+        print(f"ERRO IA ({chat_id}):", e)
         traceback.print_exc()
 
 # ============================================
 # START
 # ============================================
 
-@bot.message_handler(commands=['start'])
+@bot.message_handler(commands=["start"])
 def comando_start(message):
 
     try:
@@ -359,12 +342,11 @@ def comando_start(message):
             message.from_user.first_name
         )
 
-        print(f"NOVO CHAT: {chat_id}")
+        print("NOVO CHAT:", chat_id)
 
     except Exception as e:
 
-        print(f"ERRO START: {e}")
-
+        print("ERRO START:", e)
         traceback.print_exc()
 
 # ============================================
@@ -407,8 +389,7 @@ def conversar(message):
 
     except Exception as e:
 
-        print(f"ERRO MSG: {e}")
-
+        print("ERRO MSG:", e)
         traceback.print_exc()
 
 # ============================================
@@ -440,8 +421,7 @@ def mostrar_historico(call):
 
     except Exception as e:
 
-        print(f"ERRO HIST: {e}")
-
+        print("ERRO HIST:", e)
         traceback.print_exc()
 
 # ============================================
@@ -468,7 +448,7 @@ if __name__ == "__main__":
 
         except Exception as e:
 
-            print(f"ERRO POLLING: {e}")
+            print("ERRO POLLING:", e)
 
             traceback.print_exc()
 
