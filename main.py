@@ -29,6 +29,15 @@ if not TELEGRAM_BOT_KEY:
     raise Exception("TELEGRAM_BOT_KEY não encontrada")
 
 # ============================================
+# DEBUG
+# ============================================
+
+print("OPENAI OK")
+print("TELEGRAM OK")
+print("LOG_CHAT_ID =", LOG_CHAT_ID)
+print("VIP_LINK =", VIP_LINK)
+
+# ============================================
 # ÁUDIOS
 # ============================================
 
@@ -36,11 +45,40 @@ AUDIO_START = "start.ogg"
 AUDIO_HOT = "hot.ogg"
 
 # ============================================
-# BOT / OPENAI
+# TELEGRAM
 # ============================================
 
-bot = telebot.TeleBot(TELEGRAM_BOT_KEY)
-openai_client = OpenAI(api_key=OPENAI_KEY)
+try:
+
+    bot = telebot.TeleBot(TELEGRAM_BOT_KEY)
+
+    print("BOT TELEGRAM INICIADO")
+
+except Exception as e:
+
+    print("ERRO TELEGRAM:", e)
+
+    traceback.print_exc()
+
+    raise e
+
+# ============================================
+# OPENAI
+# ============================================
+
+try:
+
+    openai_client = OpenAI(api_key=OPENAI_KEY)
+
+    print("OPENAI CLIENT INICIADO")
+
+except Exception as e:
+
+    print("ERRO OPENAI:", e)
+
+    traceback.print_exc()
+
+    raise e
 
 # ============================================
 # MEMÓRIA
@@ -61,14 +99,9 @@ vip_enviado = {}
 PROMPT_BIA = """
 Você é Bia Lins, 26 anos, de Salvador.
 
-Você conversa como uma mulher real no Telegram:
-casual, natural e provocante.
-
+Converse de forma natural, casual e provocante.
 Nunca diga que é IA.
 Nunca seja robótica.
-Nunca interrogue demais.
-
-Seu objetivo é criar conexão e conduzir naturalmente pro VIP.
 """
 
 # ============================================
@@ -109,6 +142,7 @@ def enviar_audio_start(chat_id):
     except Exception as e:
 
         print(f"ERRO AUDIO START: {e}")
+
         traceback.print_exc()
 
 # ============================================
@@ -148,6 +182,7 @@ def enviar_vip(chat_id):
     except Exception as e:
 
         print(f"ERRO VIP: {e}")
+
         traceback.print_exc()
 
         return False
@@ -242,48 +277,21 @@ def processar_resposta_final(chat_id):
             f"👤 Lead: {texto_usuario}"
         )
 
-        # ====================================
-        # INTERESSE VIP
-        # ====================================
-
         if tem_interesse_vip(texto_usuario):
 
             enviar_vip(chat_id)
 
-            memoria_contexto[chat_id].append({
-                "role": "assistant",
-                "content": "[VIP ENVIADO]"
-            })
-
-            historico_conversas[chat_id].append(
-                "🤖 Bia: [VIP ENVIADO]"
-            )
-
-            atualizar_log(chat_id, "Lead")
-
             return
-
-        # ====================================
-        # DIGITANDO
-        # ====================================
 
         bot.send_chat_action(chat_id, "typing")
 
         time.sleep(random.randint(2, 4))
-
-        # ====================================
-        # 20ª MSG -> VIP
-        # ====================================
 
         if contador_mensagens[chat_id] >= 20:
 
             enviar_vip(chat_id)
 
             return
-
-        # ====================================
-        # OPENAI
-        # ====================================
 
         resposta = openai_client.chat.completions.create(
             model="gpt-4o-mini",
@@ -312,6 +320,7 @@ def processar_resposta_final(chat_id):
     except Exception as e:
 
         print(f"ERRO IA ({chat_id}): {e}")
+
         traceback.print_exc()
 
 # ============================================
@@ -355,6 +364,7 @@ def comando_start(message):
     except Exception as e:
 
         print(f"ERRO START: {e}")
+
         traceback.print_exc()
 
 # ============================================
@@ -398,6 +408,7 @@ def conversar(message):
     except Exception as e:
 
         print(f"ERRO MSG: {e}")
+
         traceback.print_exc()
 
 # ============================================
@@ -430,6 +441,7 @@ def mostrar_historico(call):
     except Exception as e:
 
         print(f"ERRO HIST: {e}")
+
         traceback.print_exc()
 
 # ============================================
