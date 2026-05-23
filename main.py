@@ -15,9 +15,6 @@ OPENAI_KEY = "sk-proj-Y2spjxBvFHIWZ48RAmnqAhbuhZ0qATcB4-luGlCsAwyNCqcG29P-qoLCm3
 TELEGRAM_BOT_KEY = "8767090132:AAFmdHJSLmPvReEQEGW1XuKqE4Xfw56B6OM"
 LOG_CHAT_ID = "-1003525401040"
 
-AUDIO_START = "start.ogg"
-AUDIO_HOT = "hot.ogg"
-
 bot = telebot.TeleBot(TELEGRAM_BOT_KEY)
 openai_client = OpenAI(api_key=OPENAI_KEY)
 VIP_LINK = "https://t.me/bialinsbot"
@@ -39,32 +36,29 @@ vip_enviado = {}
 def tem_interesse_vip(texto: str) -> bool:
     texto_lower = texto.lower()
     palavras = ["vip", "víp", "link", "acesso", "quero ver", "quero entrar", "manda o link",
-                "me passa", "conteúdo", "fotos nua", "pelada", "quero o vip"]
+                "me passa", "foto", "nude", "pelada", "prévia", "palhinha", "vídeo", "conteúdo"]
     return any(p in texto_lower for p in palavras)
 
 # ============================================
-# ENVIAR OFERTA VIP
+# ENVIAR VIP (bem putona)
 # ============================================
 def enviar_vip(chat_id):
     if vip_enviado.get(chat_id, False):
         return False
-   
+
     try:
-        with open(AUDIO_HOT, 'rb') as audio:
-            bot.send_voice(chat_id, audio)
-        time.sleep(2.8)
         texto = (
-            "ai amor... tô toda molhada aqui conversando com você 😩\n\n"
-            "no VIP eu posto tudo que não posso colocar aqui: fotos minhas completamente pelada, "
-            "buceta molhada e aberta, vídeos eu masturbando e gozando de verdade, cavalgando, "
-            "de quatro, boquete guloso e dando o cu...\n\n"
-            "tudo bem explícito. Quer ver tudo isso comigo?"
+            "No VIP eu posto tudo bem safado pra você...\n\n"
+            "foto minha pelada completa, buceta bem molhada e aberta piscando, "
+            "vídeos eu me masturbando gemendo alto e gozando de verdade, cavalgando gostoso, "
+            "de quatro tomando rola bem fundo, chupando pau guloso até engasgar e dando meu cu arrombado...\n\n"
+            "tudo explícito e sem censura. Quer ver tudo isso?"
         )
-       
+        
         bot.send_message(chat_id, texto)
-        time.sleep(1.5)
+        time.sleep(1.2)
         bot.send_message(chat_id, VIP_LINK)
-       
+        
         vip_enviado[chat_id] = True
         return True
     except Exception as e:
@@ -72,7 +66,7 @@ def enviar_vip(chat_id):
         return False
 
 # ============================================
-# PROMPT ATUALIZADO - MAIS CONDUTORA E SEDUTORA
+# PROMPT ATUALIZADO
 # ============================================
 PROMPT_BIA = """
 Você é Bia Lins, 26 anos, de Salvador.
@@ -84,58 +78,35 @@ Seu objetivo principal é criar tesão, excitação e curiosidade no lead, condu
 ━━━━━━━━━━━━━━━━━━━
 PERSONALIDADE
 ━━━━━━━━━━━━━━━━━━━
-- Mulher real, estressada e ocupada do dia a dia
-- Sempre está na delegacia (nunca em casa relaxando)
-- Fala como uma policial militar que tá no corre, cheia de ocorrência
-- Natural, confiante, um pouco safada e provocante
-- Imprevisível, espontânea e humana
+- Mulher real, confiante e extremamente safada quando o clima esquenta
+- Fala como uma mina de Salvador que tá pegando um cara
+- Natural, espontânea e humana
+- Só menciona a delegacia/trabalho uma única vez no início. Depois nunca mais fala sobre isso.
 
 ━━━━━━━━━━━━━━━━━━━
 FORMA DE CONVERSAR
 ━━━━━━━━━━━━━━━━━━━
 - Fale de forma bem natural e coloquial.
 - Respostas curtas ou médias (1-3 frases).
-- Seja mais ouvinte, mas também conduza a conversa.
-- Pergunte pouco (máximo 4-5 perguntas a cada 20 mensagens).
+- Máximo 1 pergunta por resposta.
+- Só faça pergunta se o lead tiver feito uma pergunta antes.
 - Use gírias leves de Salvador (oxe, meu bem, tá doido, ai que isso, etc).
+- Não use muitos emojis.
 
 ━━━━━━━━━━━━━━━━━━━
-CONTEXTO DA BIA
-━━━━━━━━━━━━━━━━━━━
-- Você está sempre na delegacia, estressada, cheia de ocorrência.
-- Sempre mencione o cansaço ou o movimento da delegacia.
-- Exemplo: "tô aqui na delegacia atolada de BO", "acabou de chegar mais uma ocorrência".
-
-━━━━━━━━━━━━━━━━━━━
-COMPORTAMENTO (IMPORTANTE - MUDANÇA)
+COMPORTAMENTO
 ━━━━━━━━━━━━━━━━━━━
 - Comece casual e leve.
-- Vá aumentando o flerte e o tesão aos poucos, mesmo que o lead ainda não esteja sendo muito safado.
-- Seja provocante de forma natural: fale do seu corpo, do calor, do que você está sentindo, use duplo sentido leve.
-- Quando o lead ficar safado: vire extremamente vulgar, detalhada e sem filtro (pau, buceta, caralho, gozar, foder, etc).
+- Vá aumentando o flerte aos poucos.
+- Quando o lead ficar safado ou falar putaria: vire extremamente vulgar, explícita e pornográfica (pau, buceta, caralho, porra, gozar, foder, meter, chupar, cu, gozo, arrombada, etc).
 - Nunca mande foto, vídeo ou conteúdo gratuito.
 - Você não tem WhatsApp, só Telegram e Instagram (@bia.lins01).
 
 ━━━━━━━━━━━━━━━━━━━
-REGRA SOBRE CONTEÚDO
+REGRA SOBRE VIP
 ━━━━━━━━━━━━━━━━━━━
-- Nunca mande nada explícito de graça.
-- Se pedirem foto ou palhinha: responda que só tem no VIP.
-
-━━━━━━━━━━━━━━━━━━━
-SOBRE O VIP
-━━━━━━━━━━━━━━━━━━━
-- O VIP é apenas para conteúdo explícito.
-- Link: https://t.me/bialinsbot
-- Lá tem: fotos pelada completa, buceta molhada, vídeos gozando, masturbando, cavalgando, de quatro, boquete e dando o cu.
-- Vá conduzindo o lead para o VIP naturalmente, deixando ele excitado.
-
-━━━━━━━━━━━━━━━━━━━
-REGRA DA 20ª MENSAGEM
-━━━━━━━━━━━━━━━━━━━
-Quando chegar na 20ª mensagem do usuário (ou antes se ele demonstrar interesse):
-- Fique bem safada e com tesão.
-- Faça uma oferta clara do VIP e envie o link.
+- Só envie o link do VIP quando o lead demonstrar interesse claro ou pedir alguma mídia (foto, prévia, palhinha, nudes, vídeo, etc).
+- Sempre que for mandar o link, descreva o conteúdo de forma bem putona e pornográfica.
 """
 
 # ============================================
@@ -167,10 +138,12 @@ def processar_resposta_final(chat_id):
     try:
         if chat_id not in mensagens_pendentes or not mensagens_pendentes[chat_id]:
             return
-        time.sleep(random.randint(10, 22))
+
+        time.sleep(random.randint(8, 18))
         mensagens = mensagens_pendentes[chat_id]
         mensagens_pendentes[chat_id] = []
         texto_usuario = " ".join(mensagens).strip()
+
         if len(texto_usuario) < 2:
             return
 
@@ -181,28 +154,26 @@ def processar_resposta_final(chat_id):
         if tem_interesse_vip(texto_usuario):
             enviar_vip(chat_id)
             memoria_contexto[chat_id].append({"role": "assistant", "content": "[VIP ENVIADO]"})
-            historico_conversas[chat_id].append("🤖 Bia: [OFERTA VIP ENVIADA]")
+            historico_conversas[chat_id].append("🤖 Bia: [VIP ENVIADO]")
             atualizar_log(chat_id, "Lead")
             return
 
         bot.send_chat_action(chat_id, "typing")
-        time.sleep(random.randint(2, 5))
+        time.sleep(random.randint(2, 4))
 
-        if contador_mensagens[chat_id] >= 20:
-            enviar_vip(chat_id)
-        else:
-            resposta = openai_client.chat.completions.create(
-                model="gpt-4o-mini",
-                messages=[memoria_contexto[chat_id][0]] + memoria_contexto[chat_id][-10:],
-                max_tokens=160,          # aumentei um pouco
-                temperature=0.82         # aumentei para mais criatividade/safadeza
-            ).choices[0].message.content
+        resposta = openai_client.chat.completions.create(
+            model="gpt-4o-mini",
+            messages=[memoria_contexto[chat_id][0]] + memoria_contexto[chat_id][-10:],
+            max_tokens=160,
+            temperature=0.80
+        ).choices[0].message.content
 
-            bot.send_message(chat_id, resposta)
-            memoria_contexto[chat_id].append({"role": "assistant", "content": resposta})
-            historico_conversas[chat_id].append(f"🤖 Bia: {resposta}")
+        bot.send_message(chat_id, resposta)
+        memoria_contexto[chat_id].append({"role": "assistant", "content": resposta})
+        historico_conversas[chat_id].append(f"🤖 Bia: {resposta}")
 
         atualizar_log(chat_id, "Lead")
+
     except Exception as e:
         print(f"ERRO IA ({chat_id}): {e}")
 
@@ -213,11 +184,7 @@ def processar_resposta_final(chat_id):
 def comando_start(message):
     try:
         chat_id = message.chat.id
-        delay_inicial = random.randint(55, 65)   # próximo de 60s
-        time.sleep(delay_inicial)
-        
-        with open(AUDIO_START, 'rb') as audio:
-            bot.send_voice(chat_id, audio)
+        print(f"[START] Nova conversa iniciada: {chat_id}")
 
         memoria_contexto[chat_id] = [{"role": "system", "content": PROMPT_BIA}]
         historico_conversas[chat_id] = []
@@ -226,9 +193,21 @@ def comando_start(message):
         vip_enviado[chat_id] = False
 
         atualizar_log(chat_id, message.from_user.first_name)
-        print(f"Nova conversa iniciada: {chat_id}")
+
+        # Delay de 60 segundos
+        print(f"Aguardando 60 segundos para {chat_id}...")
+        time.sleep(60)
+
+        # Se não teve nenhuma mensagem do usuário, envia "Oie, tudo bem?"
+        if chat_id not in mensagens_pendentes or len(mensagens_pendentes.get(chat_id, [])) == 0:
+            try:
+                bot.send_message(chat_id, "Oie, tudo bem? 🥰")
+                print(f"Mensagem inicial enviada para {chat_id}")
+            except Exception as e:
+                print(f"Erro ao enviar mensagem inicial: {e}")
+
     except Exception as e:
-        print(f"ERRO START: {e}")
+        print(f"ERRO START ({chat_id}): {e}")
 
 # ============================================
 # CONVERSA
@@ -239,6 +218,7 @@ def conversar(message):
         chat_id = message.chat.id
         if chat_id not in memoria_contexto or not message.text:
             return
+
         texto = message.text.strip()
         if len(texto) < 2:
             return
@@ -249,9 +229,10 @@ def conversar(message):
 
         if chat_id in timers:
             timers[chat_id].cancel()
-        
-        timers[chat_id] = threading.Timer(15, processar_resposta_final, args=[chat_id])
+
+        timers[chat_id] = threading.Timer(12, processar_resposta_final, args=[chat_id])
         timers[chat_id].start()
+
     except Exception as e:
         print(f"ERRO MSG: {e}")
 
@@ -271,7 +252,7 @@ def mostrar_historico(call):
 
 # ============================================
 if __name__ == "__main__":
-    print("BOT ONLINE - Modo Sedutor Ativado")
+    print("BOT ONLINE - Bia Lins Ativada")
     print("Aguardando conexões...")
     while True:
         try:
